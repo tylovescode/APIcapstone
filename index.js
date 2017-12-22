@@ -28,7 +28,8 @@ function initAutocomplete() {
     var service = new google.maps.places.PlacesService(map);
     var latitude=places[0].geometry.viewport.b.b;
     var longitude=places[0].geometry.viewport.f.b;
-    console.log(longitude);
+    console.log(places)
+
     service.nearbySearch({
       location: {lat: latitude, lng: longitude},
       radius: 500,
@@ -43,7 +44,7 @@ function initAutocomplete() {
     }
   }
 
-useLocation(places[0].formatted_address);
+useLocation(places[0].formatted_address, latitude, longitude, map);
 
     if (places.length == 0) {
       return;
@@ -57,39 +58,39 @@ useLocation(places[0].formatted_address);
 
     // For each place, get the icon, name and location.
     var bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-      if (!place.geometry) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
-      var icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
+    // places.forEach(function(place) {
+    //   if (!place.geometry) {
+    //     console.log("Returned place contains no geometry");
+    //     return;
+    //   }
+    //   var icon = {
+    //     url: place.icon,
+    //     size: new google.maps.Size(71, 71),
+    //     origin: new google.maps.Point(0, 0),
+    //     anchor: new google.maps.Point(17, 34),
+    //     scaledSize: new google.maps.Size(25, 25)
+    //   };
 
-      // Create a marker for each place.
-      markers.push(new google.maps.Marker({
-        map: map,
-        icon: icon,
-        title: place.name,
-        position: place.geometry.location
-      }));
+    //   // Create a marker for each place.
+    //   markers.push(new google.maps.Marker({
+    //     map: map,
+    //     icon: icon,
+    //     title: place.name,
+    //     position: place.geometry.location
+    //   }));
 
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
+    //   if (place.geometry.viewport) {
+    //     // Only geocodes have viewport.
+    //     bounds.union(place.geometry.viewport);
+    //   } else {
+    //     bounds.extend(place.geometry.location);
+    //   }
+    // });
     map.fitBounds(bounds);
   });
 }
 
-function useLocation(address) {
+function useLocation(address, latitude, longitude) {
   //Simple Weather  
   $.simpleWeather({
     location: address,
@@ -121,14 +122,45 @@ function useLocation(address) {
 //Ticketmaster
 $.ajax({
   type:"GET",
-  url:"https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS",
+  url:"https://app.ticketmaster.com/discovery/v2/events.json?apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&latlong="+longitude+","+latitude,
   async:true,
   dataType: "json",
   size: 10,
   success: function(json) {
               console.log(json)
               console.log(json._embedded.events[0])
-              $("#events").html(`${json._embedded.events[0]}`);
+              $.each(json._embedded.events, function(index, value) {
+              $('#events').append("<h4>"+value.name+"</h4>")
+              })
+var locations = [
+      ['Bondi Beach', -33.890542, 151.274856, 4],
+      ['Coogee Beach', -33.923036, 151.259052, 5],
+      ['Cronulla Beach', -34.028249, 151.157507, 3],
+      ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+      ['Maroubra Beach', -33.950198, 151.259302, 1]
+    ];
+
+    
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  
+              //$("#events").html(`${json._embedded.events[0]}`);
               // Parse the response.
               // Do other things.
            },
