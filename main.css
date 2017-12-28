@@ -1,8 +1,8 @@
 #header {
   background-color: blue;
   color: white;
-  font-family: Roboto;
   padding: 10px;
+  height: 150px;
 }
 
 #map-box {
@@ -40,6 +40,8 @@
       body {
         margin: 0;
         margin-top: 0;
+        font-family: 'Abel', sans-serif;
+
         /*padding-left: 50px;
         padding-right: 50px;
         padding-top: 25px;*/

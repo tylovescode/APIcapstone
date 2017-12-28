@@ -99,7 +99,7 @@ function useLocation(address, latitude, longitude) {
     success: function(weather) {
       console.log(weather)
       // $("#weather").html("<h2>The current temperature in "+weather.city+" is "+weather.temp+"&deg;"+weather.units.temp+".</h2><p>The sun will set at "+weather.sunset+".</p>");
-      $("#weather").html("<h2>In "+weather.city+", it is currently "+weather.text+" and "+weather.temp+"&deg;"+weather.units.temp+".</h2><p>The sun will set at "+weather.sunset+".</p>");
+      $("#weather").html("<h2>In "+weather.city+", it is currently "+weather.text+" and "+weather.temp+"&deg;"+weather.units.temp+".</h2>");
     },
     error: function(error) {
       $("#weather").html('<p>'+error+'</p>');
@@ -112,7 +112,6 @@ $.ajax({
   url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&latlong="+longitude+","+latitude,
   async:true,
   dataType: "json",
-  size: 10,
   success: function(json) {
               //if another location is searched for, clear event results from old location
               $('#events').empty();  
@@ -120,8 +119,8 @@ $.ajax({
               console.log(json._embedded.events[0])
               console.log(json._embedded.events[0]._embedded.venues[0].location)
               $.each(json._embedded.events, function(index, value) {
-              $('#going-on').html("<h3>Here's what is going on near "+address+"</h3>")
-              $('#events').append("<h4>"+value.name+"</h4>")
+              $('#going-on').html("<h3>Here's what is going on near "+address+":</h3>")
+              $('#events').append("<h4>"+value.name+", "+value._embedded.venues[0].name+".</h4>")
               })
             },
 
