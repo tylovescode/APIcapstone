@@ -109,7 +109,7 @@ function useLocation(address, latitude, longitude) {
 //Ticketmaster
 $.ajax({
   type:"GET",
-  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&latlong="+longitude+","+latitude,
+  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=distance,asc&latlong="+longitude+","+latitude,
   async:true,
   dataType: "json",
   success: function(json) {
@@ -123,42 +123,30 @@ $.ajax({
               $('#events').append("<h4>"+value.name+", "+value._embedded.venues[0].name+" ("+value._embedded.venues[0].distance+" miles away).</h4>")
               })
             },
-
-
-// var locations = [
-//       ['Bondi Beach', -33.890542, 151.274856, 4],
-//       ['Coogee Beach', -33.923036, 151.259052, 5],
-//       ['Cronulla Beach', -34.028249, 151.157507, 3],
-//       ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-//       ['Maroubra Beach', -33.950198, 151.259302, 1]
-// //     ];
-
-    
-
-//     var infowindow = new google.maps.InfoWindow();
-
-//     var marker, i;
-
-//     for (i = 0; i < locations.length; i++) {  
-//       marker = new google.maps.Marker({
-//         position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-//         map: map
-//       });
-
-//       google.maps.event.addListener(marker, 'click', (function(marker, i) {
-//         return function() {
-//           infowindow.setContent(locations[i][0]);
-//           infowindow.open(map, marker);
-//         }
-//       })(marker, i));
-//     }
-  
-//               //$("#events").html(`${json._embedded.events[0]}`);
-//               // Parse the response.
-//               // Do other things.
-//            },
   error: function(xhr, status, err) {
            }
-});    
+}); 
+
+//Foursquare
+$.ajax({
+  type:"GET",
+  url:"https://api.foursquare.com/v2/venues/explore?ll="+longitude+","+latitude+"&limit=10&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
+  async:true,
+  dataType: "json",
+  success: function(json) {
+              //if another location is searched for, clear event results from old location
+              $('#food').empty();  
+              console.log("Foursquare running")
+              console.log(json)
+              console.log(json.response.groups[0].items[0].venue.name)
+              // console.log(json._embedded.events[0])
+              // $.each(json._embedded.events, function(index, value) {
+              // $('#food').append("<h4>"+value.name+", "+value._embedded.venues[0].name+"</h4>")
+              // })
+            },
+  error: function(xhr, status, err) {
+           }
+});
+
 };
     
