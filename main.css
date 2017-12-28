@@ -1,14 +1,48 @@
+#header {
+  background-color: blue;
+  color: white;
+  font-family: Roboto;
+  padding: 10px;
+}
+
+#map-box {
+  display: flex;
+  width: 100%;
+}
+
+#weather {
+  width: 50%;
+  /*display: inline-block;*/
+}
+
+#events-box {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+#going-on, #events {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#going-on {
+  margin: 0px;
+}
+
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
         height: 500px;
+        width: 50%;
       }
       /* Optional: Makes the sample page fill the window. */
-      html, body {
+      body {
         margin: 0;
-        padding-left: 100px;
-        padding-right: 100px;
-        padding-top: 25px;
+        margin-top: 0;
+        /*padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 25px;*/
       }
       #description {
         font-family: Roboto;
