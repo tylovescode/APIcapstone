@@ -120,7 +120,7 @@ $.ajax({
               console.log(json._embedded.events[0]._embedded.venues[0].location)
               $.each(json._embedded.events, function(index, value) {
               $('#going-on').html("<h3>Here's what is going on near "+address+":</h3>")
-              $('#events').append("<h4>"+value.name+", "+value._embedded.venues[0].name+".</h4>")
+              $('#events').append("<h4>"+value.name+", "+value._embedded.venues[0].name+" ("+value._embedded.venues[0].distance+" miles away).</h4>")
               })
             },
 
