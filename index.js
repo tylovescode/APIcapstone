@@ -100,6 +100,7 @@ function useLocation(address, latitude, longitude) {
       console.log(weather)
       // $("#weather").html("<h2>The current temperature in "+weather.city+" is "+weather.temp+"&deg;"+weather.units.temp+".</h2><p>The sun will set at "+weather.sunset+".</p>");
       $("#weather").html("<h2>In "+weather.city+", it is currently "+weather.text+" and "+weather.temp+"&deg;"+weather.units.temp+".</h2>");
+      $('#going-on').html("<h3>Here's what is going on near "+weather.city+":</h3>")
     },
     error: function(error) {
       $("#weather").html('<p>'+error+'</p>');
@@ -119,7 +120,7 @@ $.ajax({
               console.log(json._embedded.events[0])
               console.log(json._embedded.events[0]._embedded.venues[0].location)
               $.each(json._embedded.events, function(index, value) {
-              $('#going-on').html("<h3>Here's what is going on near "+address+":</h3>")
+              // $('#going-on').html("<h3>Here's what is going on near "+address+":</h3>")
               $('#events').append("<h4>"+value.name+", "+value._embedded.venues[0].name+" ("+value._embedded.venues[0].distance+" miles away).</h4>")
               })
             },
@@ -140,9 +141,9 @@ $.ajax({
               console.log(json)
               console.log(json.response.groups[0].items[0].venue.name)
               // console.log(json._embedded.events[0])
-              // $.each(json._embedded.events, function(index, value) {
-              // $('#food').append("<h4>"+value.name+", "+value._embedded.venues[0].name+"</h4>")
-              // })
+              $.each(json.response.groups[0].items, function(index, value) {
+              $('#food').append("<h4>"+value.venue.name+"</h4>")
+              })
             },
   error: function(xhr, status, err) {
            }
