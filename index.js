@@ -131,7 +131,7 @@ $.ajax({
 //Foursquare
 $.ajax({
   type:"GET",
-  url:"https://api.foursquare.com/v2/venues/explore?ll="+longitude+","+latitude+"&limit=10&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
+  url:"https://api.foursquare.com/v2/venues/explore?ll="+longitude+","+latitude+"&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
   async:true,
   dataType: "json",
   success: function(json) {
@@ -142,7 +142,7 @@ $.ajax({
               console.log(json.response.groups[0].items[0].venue.name)
               // console.log(json._embedded.events[0])
               $.each(json.response.groups[0].items, function(index, value) {
-              $('#food').append("<h4>"+value.venue.name+"</h4>")
+              $('#food').append("<h4><a href="+value.venue.url+">"+value.venue.name+"</a></h4>")
               })
             },
   error: function(xhr, status, err) {
