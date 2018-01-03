@@ -1,8 +1,12 @@
+* {
+    box-sizing: border-box;
+}
+
 #header {
   background-color: blue;
   color: white;
   padding: 10px;
-  height: 165px;
+  height: 150px;
   position: fixed;
   left: 0;
   top: 0;
@@ -17,6 +21,7 @@
   background-color: blue;
   color: white;
   text-align: center;
+  margin-top: 15px;
 }
 
 #content-box {
@@ -24,32 +29,40 @@
   width: 100%;
 }
 
-#events-box {
+#map-box {
   display: flex;
-  flex-direction: column;
+  width: 100%;
+}
+
+#events {
   width: 50%;
+  background-color: lightblue;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 20px;
 }
 
-#going-on, #events {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-#going-on {
-  margin: 0px;
+#food, #weather-box {
+  width: 50%;
+  background-color: lightblue;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 20px;
 }
 
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 500px;
-        width: 100%;
+        height: 300px;
+        width: 50%;
         z-index: 1;
+        border-radius: 20px;
+        margin: 10px;
       }
       /* Optional: Makes the sample page fill the window. */
       body {
         margin: 0;
-        margin-top: 175px;
+        margin-top: 150px;
         font-family: 'Abel', sans-serif;
 
         /*padding-left: 50px;
