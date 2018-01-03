@@ -98,8 +98,17 @@ function useLocation(address, latitude, longitude) {
     unit: 'f',
     success: function(weather) {
       console.log(weather)
+      $('#forecast').empty();
       // $("#weather").html("<h2>The current temperature in "+weather.city+" is "+weather.temp+"&deg;"+weather.units.temp+".</h2><p>The sun will set at "+weather.sunset+".</p>");
-      $("#weather").html("<h2>In "+weather.city+", it is currently "+weather.text+" and "+weather.temp+"&deg;"+weather.units.temp+".</h2>");
+      $("#weather").html("<h3>Current "+weather.city+" weather: "+weather.text+", "+weather.temp+"&deg;"+weather.units.temp+".</h3>");
+      //5 day forecast
+      $.each(weather.forecast, function(index, value) {
+         //Limits results to 5 days
+         if (index == 5) {
+            return false;
+      }
+        $('#forecast').append("<p>"+value.day+", "+value.text+" "+value.high+"/"+value.low+"</p>")
+      })
       $('#going-on').html("<h3>Here's what is going on near "+weather.city+":</h3>")
     },
     error: function(error) {
@@ -110,7 +119,7 @@ function useLocation(address, latitude, longitude) {
 //Ticketmaster
 $.ajax({
   type:"GET",
-  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=distance,asc&latlong="+longitude+","+latitude,
+  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=name,asc&latlong="+longitude+","+latitude,
   async:true,
   dataType: "json",
   success: function(json) {
@@ -121,7 +130,7 @@ $.ajax({
               console.log(json._embedded.events[0]._embedded.venues[0].location)
               $.each(json._embedded.events, function(index, value) {
               // $('#going-on').html("<h3>Here's what is going on near "+address+":</h3>")
-              $('#events').append("<h4>"+value.name+", "+value._embedded.venues[0].name+" ("+value._embedded.venues[0].distance+" miles away).</h4>")
+              $('#events').append("<h4>"+value.dates.start.localDate+", "+value.name+", "+value._embedded.venues[0].name+"</h4>")
               })
             },
   error: function(xhr, status, err) {
@@ -142,7 +151,7 @@ $.ajax({
               console.log(json.response.groups[0].items[0].venue.name)
               // console.log(json._embedded.events[0])
               $.each(json.response.groups[0].items, function(index, value) {
-              $('#food').append("<h4><a href="+value.venue.url+">"+value.venue.name+"</a></h4>")
+              $('#food').append("<h4><a href="+value.venue.url+">"+value.venue.name+"</a> - "+value.venue.location.address+", "+value.venue.location.city+"</h4>")
               })
             },
   error: function(xhr, status, err) {
