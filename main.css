@@ -21,12 +21,12 @@
   background-color: blue;
   color: white;
   text-align: center;
-  margin-top: 15px;
 }
 
 #content-box {
   display: flex;
   width: 100%;
+  margin-bottom: 20px;
 }
 
 #map-box {
@@ -34,20 +34,13 @@
   width: 100%;
 }
 
-#events {
+#food-box, #weather-box, #events-box {
   width: 50%;
   background-color: lightblue;
   padding: 10px;
   margin: 10px;
   border-radius: 20px;
-}
-
-#food, #weather-box {
-  width: 50%;
-  background-color: lightblue;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 20px;
+  text-align: center;
 }
 
  /* Always set the map height explicitly to define the size of the div
@@ -140,3 +133,18 @@
       #target {
         width: 345px;
       }
+
+@media only screen and (max-width:600px) {
+
+  #map, #weather-box, #events-box, #food-box {
+   width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #content-box {
+    display: block;
+  }
+  #map-box {
+    display: block;
+  }
+}
