@@ -1,26 +1,36 @@
+//Hides content initially
+function hideContent() {
+$('#weather-box').hide();
+$('#content-box').hide();
+}
+
+//Shows content
+function showContent() {
+  $('#weather-box').show();
+  $('#content-box').show();
+}
+
 //Google Maps
 function initAutocomplete() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    //enter starting location
-    center: {lat: 34.7698, lng: -84.9702},
-    zoom: 13,
-    mapTypeId: 'roadmap'
-    });
-
+  
     // Create the search box and link it to the UI element.
   var input = document.getElementById('pac-input');
   var searchBox = new google.maps.places.SearchBox(input);
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
   // Bias the SearchBox results towards current map's viewport.
-  map.addListener('bounds_changed', function() {
-    searchBox.setBounds(map.getBounds());
-  });
+  // map.addListener('bounds_changed', function() {
+  //   searchBox.setBounds(map.getBounds());
+  // });
 
   var markers = [];
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener('places_changed', function() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 13,
+    mapTypeId: 'roadmap'
+    });
     var places = searchBox.getPlaces();
     console.log("Searched place formatted",places[0].formatted_address);
     // v3.1.0
@@ -28,6 +38,7 @@ function initAutocomplete() {
     var service = new google.maps.places.PlacesService(map);
     var latitude=places[0].geometry.viewport.b.b;
     var longitude=places[0].geometry.viewport.f.b;
+    var cityname=places[0].address_components[0].short_name;
     console.log(places)
 
     service.nearbySearch({
@@ -44,8 +55,8 @@ function initAutocomplete() {
     }
   }
 
-useLocation(places[0].formatted_address, latitude, longitude, map);
-
+useLocation(places[0].formatted_address, latitude, longitude, cityname);
+showContent();
     if (places.length == 0) {
       return;
     }
@@ -88,9 +99,12 @@ useLocation(places[0].formatted_address, latitude, longitude, map);
     });
     map.fitBounds(bounds);
   });
+
+
+
 }
 
-function useLocation(address, latitude, longitude) {
+function useLocation(address, latitude, longitude, cityname) {
   //Simple Weather  
   $.simpleWeather({
     location: address,
@@ -100,16 +114,17 @@ function useLocation(address, latitude, longitude) {
       console.log(weather)
       $('#forecast').empty();
       // $("#weather").html("<h2>The current temperature in "+weather.city+" is "+weather.temp+"&deg;"+weather.units.temp+".</h2><p>The sun will set at "+weather.sunset+".</p>");
-      $("#weather").html("<h3>Current "+weather.city+" weather: "+weather.text+", "+weather.temp+"&deg;"+weather.units.temp+".</h3>");
+      $("#weather").html("<h3>Current "+weather.city+" Weather: "+weather.text+", "+weather.temp+"&deg;"+weather.units.temp+".</h3>");
       //5 day forecast
       $.each(weather.forecast, function(index, value) {
          //Limits results to 5 days
          if (index == 5) {
             return false;
       }
-        $('#forecast').append("<p>"+value.day+", "+value.text+" "+value.high+"/"+value.low+"</p>")
+        $('#forecast').append("<h4>"+value.day+", "+value.text+" "+value.high+"/"+value.low+"</h4>")
       })
-      $('#going-on').html("<h3>Here's what is going on near "+weather.city+":</h3>")
+      $('#going-on').html("<h3>Here are some events near "+weather.city+":</h3>")
+      $('#food-list').html("<h3>Here are some top rated restaurants near "+weather.city+":</h3>")
     },
     error: function(error) {
       $("#weather").html('<p>'+error+'</p>');
@@ -119,7 +134,8 @@ function useLocation(address, latitude, longitude) {
 //Ticketmaster
 $.ajax({
   type:"GET",
-  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=name,asc&latlong="+longitude+","+latitude,
+  // url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=name,asc&latlong="+longitude+","+latitude,
+  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=date,asc&city="+cityname,
   async:true,
   dataType: "json",
   success: function(json) {
@@ -130,7 +146,7 @@ $.ajax({
               console.log(json._embedded.events[0]._embedded.venues[0].location)
               $.each(json._embedded.events, function(index, value) {
               // $('#going-on').html("<h3>Here's what is going on near "+address+":</h3>")
-              $('#events').append("<h4>"+value.dates.start.localDate+", "+value.name+", "+value._embedded.venues[0].name+"</h4>")
+              $('#events').append("<h4>"+value.dates.start.localDate+", <a href="+value.url+">"+value.name+"</a><br>"+value._embedded.venues[0].name+"</h4>")
               })
             },
   error: function(xhr, status, err) {
@@ -151,7 +167,13 @@ $.ajax({
               console.log(json.response.groups[0].items[0].venue.name)
               // console.log(json._embedded.events[0])
               $.each(json.response.groups[0].items, function(index, value) {
-              $('#food').append("<h4><a href="+value.venue.url+">"+value.venue.name+"</a> - "+value.venue.location.address+", "+value.venue.location.city+"</h4>")
+                if (value.venue.url===undefined) {
+                  var link=value.venue.name
+                }
+                else {
+                  var link="<a href="+value.venue.url+">"+value.venue.name+"</a>"
+                }
+              $('#food').append("<h4>"+link+"<br>"+value.venue.location.address+", "+value.venue.location.city+"</h4>")
               })
             },
   error: function(xhr, status, err) {
@@ -160,3 +182,4 @@ $.ajax({
 
 };
     
+hideContent();
