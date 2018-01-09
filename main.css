@@ -2,6 +2,39 @@
     box-sizing: border-box;
 }
 
+body {
+    margin: 0;
+    margin-top: 150px;
+    font-family: 'Abel', sans-serif;
+}
+
+#logo, #description {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  color: white;
+  background-color: blue;
+}
+
+#forecast img {
+  vertical-align: middle;
+}
+
+.background-image {
+  background-image: url('https://farm7.static.flickr.com/6053/6265136263_a49dc8fa19_b.jpg');
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 800px;
+  background-size: cover;
+}
+
 #header {
   background-color: blue;
   color: white;
@@ -41,27 +74,20 @@
   margin: 10px;
   border-radius: 20px;
   text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
- /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 300px;
-        width: 50%;
-        z-index: 1;
-        border-radius: 20px;
-        margin: 10px;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      body {
-        margin: 0;
-        margin-top: 150px;
-        font-family: 'Abel', sans-serif;
 
-        /*padding-left: 50px;
-        padding-right: 50px;
-        padding-top: 25px;*/
-      }
+#map {
+  height: 450px;
+  width: 50%;
+  z-index: 1;
+  border-radius: 20px;
+  margin: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+      /* Optional: Makes the sample page fill the window. */
+      
       #description {
         font-family: 'Abel', sans-serif;
         font-size: 15px;
@@ -136,6 +162,7 @@
 
 @media only screen and (max-width:600px) {
 
+
   #map, #weather-box, #events-box, #food-box {
    width: 85%;
     margin-left: auto;
@@ -143,8 +170,13 @@
   }
   #content-box {
     display: block;
+    margin-bottom: 20px;
   }
   #map-box {
     display: block;
+  }
+
+  #logo img {
+    width: 100%;
   }
 }

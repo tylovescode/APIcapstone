@@ -2,12 +2,15 @@
 function hideContent() {
 $('#weather-box').hide();
 $('#content-box').hide();
+$('#map-box').hide();
 }
 
 //Shows content
 function showContent() {
   $('#weather-box').show();
   $('#content-box').show();
+  $('#map-box').show();
+  $('.background-image').hide();
 }
 
 //Google Maps
@@ -114,17 +117,17 @@ function useLocation(address, latitude, longitude, cityname) {
       console.log(weather)
       $('#forecast').empty();
       // $("#weather").html("<h2>The current temperature in "+weather.city+" is "+weather.temp+"&deg;"+weather.units.temp+".</h2><p>The sun will set at "+weather.sunset+".</p>");
-      $("#weather").html("<h3>Current "+weather.city+" Weather: "+weather.text+", "+weather.temp+"&deg;"+weather.units.temp+".</h3>");
+      $("#weather").html("<h2>Current "+weather.city+" Weather: "+weather.text+", "+weather.temp+"&deg;"+weather.units.temp+".</h2>");
       //5 day forecast
       $.each(weather.forecast, function(index, value) {
          //Limits results to 5 days
          if (index == 5) {
             return false;
       }
-        $('#forecast').append("<h4>"+value.day+", "+value.text+" "+value.high+"/"+value.low+"</h4>")
+        $('#forecast').append("<h4>"+value.day+" <img src="+value.thumbnail+"> "+value.text+", high of "+value.high+"&deg;, low of "+value.low+"&deg;</h4>")
       })
-      $('#going-on').html("<h3>Here are some events near "+weather.city+":</h3>")
-      $('#food-list').html("<h3>Here are some top rated restaurants near "+weather.city+":</h3>")
+      $('#going-on').html("<h2>Here are some events near "+weather.city+":</h2>")
+      $('#food-list').html("<h2>Here are some top rated restaurants near "+weather.city+":</h2>")
     },
     error: function(error) {
       $("#weather").html('<p>'+error+'</p>');
@@ -134,8 +137,7 @@ function useLocation(address, latitude, longitude, cityname) {
 //Ticketmaster
 $.ajax({
   type:"GET",
-  // url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=name,asc&latlong="+longitude+","+latitude,
-  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&sort=date,asc&city="+cityname,
+  url:"https://app.ticketmaster.com/discovery/v2/events.json?size=10&apikey=ZiVpCBhveUAxqrDFzahcvahnPLMJxfFS&includePast=no&sort=date,asc&city="+cityname,
   async:true,
   dataType: "json",
   success: function(json) {
@@ -146,7 +148,8 @@ $.ajax({
               console.log(json._embedded.events[0]._embedded.venues[0].location)
               $.each(json._embedded.events, function(index, value) {
               // $('#going-on').html("<h3>Here's what is going on near "+address+":</h3>")
-              $('#events').append("<h4>"+value.dates.start.localDate+", <a href="+value.url+">"+value.name+"</a><br>"+value._embedded.venues[0].name+"</h4>")
+              // $('#events').append("<h4>"+value.dates.start.localDate+", <a href="+value.url+">"+value.name+"</a><br>"+value._embedded.venues[0].name+"</h4>")
+              $('#events').append("<h4><a href="+value.url+" target='_blank'>"+value.name+"</a><br>"+value.dates.start.localDate+" at "+value._embedded.venues[0].name+"</h4>")
               })
             },
   error: function(xhr, status, err) {
@@ -156,7 +159,8 @@ $.ajax({
 //Foursquare
 $.ajax({
   type:"GET",
-  url:"https://api.foursquare.com/v2/venues/explore?ll="+longitude+","+latitude+"&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
+  // url:"https://api.foursquare.com/v2/venues/explore?ll="+longitude+","+latitude+"&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
+  url:"https://api.foursquare.com/v2/venues/explore?near="+cityname+"&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
   async:true,
   dataType: "json",
   success: function(json) {
@@ -167,19 +171,25 @@ $.ajax({
               console.log(json.response.groups[0].items[0].venue.name)
               // console.log(json._embedded.events[0])
               $.each(json.response.groups[0].items, function(index, value) {
+                var address=value.venue.location.address
+                var city=value.venue.location.city
                 if (value.venue.url===undefined) {
                   var link=value.venue.name
                 }
                 else {
-                  var link="<a href="+value.venue.url+">"+value.venue.name+"</a>"
+                  var link="<a href="+value.venue.url+" target='_blank'>"+value.venue.name+"</a>"
                 }
-              $('#food').append("<h4>"+link+"<br>"+value.venue.location.address+", "+value.venue.location.city+"</h4>")
-              })
-            },
+                if (!city&&!address) {
+                $('#food').append("<h4>"+link+"<br>Rating:"+value.venue.rating+"</h4>")
+                }
+                else {  
+              $('#food').append("<h4>"+link+"<br>Rating:"+value.venue.rating+" | "+address+", "+city+"</h4>")
+              }
+            })   
+          },
   error: function(xhr, status, err) {
            }
 });
 
 };
-    
 hideContent();
