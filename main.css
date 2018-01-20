@@ -6,20 +6,49 @@ body {
     margin: 0;
     margin-top: 150px;
     font-family: 'Abel', sans-serif;
+    background-color: #ECF0F1;
+    color: #2C3E50;
 }
 
-#logo, #description {
+#description {
+  vertical-align: middle;
+}
+
+#another {
+	margin-left: 10px;
+}
+
+#description-box {
+  width: 50%;
+  border: 2px solid #ECF0F1;
+  border-radius: 25px;
+  z-index: 5;
+  background: rgba(231,76,60,.9);
+  position: fixed;
+  top: 175px;
+  left: 25%;
+  color: #ECF0F1;
+  padding: 15px;
+}
+
+#logo, #description, #search-box {
   text-align: center;
 }
 
 a {
   text-decoration: none;
-  color: black;
+  color: #2C3E50;
 }
 
-a:hover {
-  color: white;
-  background-color: blue;
+h4 a:hover {
+  color: #ECF0F1;
+  background-color: #E74C3C;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+ul a:hover {
+color: white;
 }
 
 #forecast img {
@@ -27,16 +56,17 @@ a:hover {
 }
 
 .background-image {
-  background-image: url('https://farm7.static.flickr.com/6053/6265136263_a49dc8fa19_b.jpg');
-  background-position: 50% 50%;
+  /*background-image: url('https://wa1.jetcdn.com/photos/ace-hotel/wHfNiFfz/architecture-buildings-city-coast.jpeg');*/
+  background-image: url('http://www.enchantedvalleyarts.com/seattlemap.jpg');
+  background-position: 5% 50%;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  height: 800px;
+  height: 1200px;
   background-size: cover;
 }
 
 #header {
-  background-color: blue;
+  background-color: #2C3E50;
   color: white;
   padding: 10px;
   height: 150px;
@@ -51,15 +81,26 @@ a:hover {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: blue;
+  height: 40px;
+  background-color: #2980B9;
   color: white;
-  text-align: center;
+  text-align: right;
+  padding-right: 25px;
+  z-index: 999;
+}
+
+ul {
+  margin-top: 9px;
+}
+
+li {
+  display: inline;
 }
 
 #content-box {
   display: flex;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 #map-box {
@@ -69,7 +110,7 @@ a:hover {
 
 #food-box, #weather-box, #events-box {
   width: 50%;
-  background-color: lightblue;
+  background-color: #3498DB;
   padding: 10px;
   margin: 10px;
   border-radius: 20px;
@@ -142,7 +183,7 @@ a:hover {
         margin-top: 12px;
         padding: 0 11px 0 13px;
         text-overflow: ellipsis;
-        width: 200px;
+        width: 150px;
       }
 
       #pac-input:focus {
@@ -160,7 +201,7 @@ a:hover {
         width: 345px;
       }
 
-@media only screen and (max-width:600px) {
+/*@media only screen and (max-width:600px) {
 
 
   #map, #weather-box, #events-box, #food-box {
@@ -179,4 +220,60 @@ a:hover {
   #logo img {
     width: 100%;
   }
+}*/
+
+/* Smartphones----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 700px) {
+#map, #weather-box, #events-box, #food-box {
+   width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+#content-box {
+    display: block;
+    margin-bottom: 45px;
+  }
+#map-box {
+    display: block;
+    margin-top: 130px;
+  }
+#logo img {
+    width: 75%;
+}
+#description-box {
+	font-size: 12px;
+}
+#header {
+	height: 125px;
+}
+body {
+	margin-top: 0;
+}
+
+/* Tablets ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+#map, #weather-box, #events-box, #food-box {
+   width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+#content-box {
+    display: block;
+    margin-bottom: 45px;
+  }
+#map-box {
+    display: block;
+    margin-top: 130px;
+  }
+#logo img {
+    width: 75%;
+}
+#description-box {
+	font-size: 12px;
+}
+#header {
+	height: 125px;
+}
+body {
+	margin-top: 0;
 }
