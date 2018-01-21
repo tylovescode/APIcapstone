@@ -21,7 +21,7 @@ function initAutocomplete() {
 
     searchBox.addListener('places_changed', function() {
         $(window).scrollTop(0);
-        $('#pac-input').empty();
+        
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             mapTypeId: 'roadmap'
@@ -29,6 +29,7 @@ function initAutocomplete() {
         var places = searchBox.getPlaces();
         console.log("Searched place formatted", places[0].formatted_address);
         console.log(places[0]);
+        $('#pac-input').empty();
         var service = new google.maps.places.PlacesService(map);
         var latitude = places[0].geometry.viewport.b.b;
         var longitude = places[0].geometry.viewport.f.b;
@@ -132,6 +133,35 @@ function useLocation(address, latitude, longitude, cityname, statename, zipcode)
     });
     console.log(json[0].zipcodes[0].zipcode);
     console.log(zipcode);
+
+    $.ajax({
+        type: "GET",
+        // url: "https://api.foursquare.com/v2/venues/explore?ll=" + longitude + "," + latitude + "&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
+        url: "https://api.foursquare.com/v2/venues/explore?near=" + zipcode + "&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
+        async: true,
+        dataType: "json",
+        success: function(json) {
+            $('#food').empty();
+            console.log("Foursquare running")
+            console.log(json)
+            console.log(json.response.groups[0].items[0].venue.name)
+            $.each(json.response.groups[0].items, function(index, value) {
+                var address = value.venue.location.address
+                var city = value.venue.location.city
+                if (value.venue.url === undefined) {
+                    var link = value.venue.name
+                } else {
+                    var link = "<a href=" + value.venue.url + " target='_blank'>" + value.venue.name + "</a>"
+                }
+                if (!city && !address) {
+                    $('#food').append("<h4>" + link + "<br>Rating:" + value.venue.rating + "</h4>")
+                } else {
+                    $('#food').append("<h4>" + link + "<br>Rating:" + value.venue.rating + " | " + address + ", " + city + "</h4>")
+                }
+            })
+        },
+        error: function(xhr, status, err) {}
+    });
 },
         error: function(xhr, status, err) {}
 });
@@ -158,34 +188,7 @@ function useLocation(address, latitude, longitude, cityname, statename, zipcode)
         }
     });
 
-    $.ajax({
-        type: "GET",
-        url: "https://api.foursquare.com/v2/venues/explore?ll=" + longitude + "," + latitude + "&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
-        // url: "https://api.foursquare.com/v2/venues/explore?near=" + zipcode + "&limit=10&section=food&client_id=DQI3FD5H5K2LDJ04NN2VL1VWKQDGINPFKSMVUDU4AUY4ZGIE&client_secret=ZGWFZWFZIM53TGVLQXFFCACRLPTDQE4HEHC10TGBEZSDFMSJ&v=20171228",
-        async: true,
-        dataType: "json",
-        success: function(json) {
-            $('#food').empty();
-            console.log("Foursquare running")
-            console.log(json)
-            console.log(json.response.groups[0].items[0].venue.name)
-            $.each(json.response.groups[0].items, function(index, value) {
-                var address = value.venue.location.address
-                var city = value.venue.location.city
-                if (value.venue.url === undefined) {
-                    var link = value.venue.name
-                } else {
-                    var link = "<a href=" + value.venue.url + " target='_blank'>" + value.venue.name + "</a>"
-                }
-                if (!city && !address) {
-                    $('#food').append("<h4>" + link + "<br>Rating:" + value.venue.rating + "</h4>")
-                } else {
-                    $('#food').append("<h4>" + link + "<br>Rating:" + value.venue.rating + " | " + address + ", " + city + "</h4>")
-                }
-            })
-        },
-        error: function(xhr, status, err) {}
-    });
+    
 
 };
 hideContent();
