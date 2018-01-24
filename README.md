@@ -8,14 +8,18 @@
 <p>Search Results - Events and Restaurants</p>
 <img src="/screenshots/vm-2.png">
 <h2>Built With</h2>
-<p>HTML</p>
-<p>CSS</p>
-<p>JavaScript</p>
-<p>JQuery</p>
+<ul>
+<li>HTML</li>
+<li>CSS</li>
+<li>JavaScript</li>
+<li>JQuery</li>
+</ul>
 <h2>APIs</h2>
-<p>Google Maps</p>
-<p>SimpleWeather</p>
-<p>Ticketmaster</p>
-<p>Foursquare</p>
+<ul>
+<li>Google Maps</li>
+<li>SimpleWeather</li>
+<li>Ticketmaster</li>
+<li>Foursquare</li>
+</ul>
 <h2>Live Demo</h2>
 <p><a href="http://tymiller.net/vm" target=_blank>Venues and Menus</a></p>
