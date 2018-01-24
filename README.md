@@ -7,6 +7,11 @@
 <img src="/screenshots/vw-1.png">
 <p>Search Results - Events and Restaurants</p>
 <img src="/screenshots/vm-2.png">
+<h2>Built With</h2>
+<p>HTML</p>
+<p>CSS</p>
+<p>JavaScript</p>
+<p>JQuery</p>
 <h2>APIs</h2>
 <p>Google Maps</p>
 <p>SimpleWeather</p>
